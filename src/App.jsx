@@ -12,7 +12,13 @@ const App = () => {
 
   const handleNameSubmission = event => {
     event.preventDefault()
-    setPersons(persons.concat({ name: newName }))
+
+    if (persons.some(person => person.name.toLowerCase() === newName.toLowerCase())) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      setPersons(persons.concat({ name: newName }))
+    }
+
     setNewName('')
   }
 
@@ -36,7 +42,7 @@ const App = () => {
           <button type="submit">add</button>
         </div>
       </form>
-      
+
       <h2>Numbers</h2>
       <div>
         {persons.map((person, id) => <Person key={id} person={person} />)}
