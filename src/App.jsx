@@ -3,12 +3,14 @@ import personService from './service/persons'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     console.log('effect');
@@ -56,6 +58,8 @@ const App = () => {
         .then(newPerson => {
           setPersons(persons.concat(newPerson))
         })
+      setNotification({ classType: 'success', message: `Added ${newPerson.name}`})
+      setTimeout(() => setNotification(null), 3000)
     }
 
     setNewName('')
@@ -96,6 +100,8 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+
+      <Notification notification={notification} />
       
       <Filter 
         filterName={filterName} 
