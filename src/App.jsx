@@ -31,7 +31,7 @@ const App = () => {
       const newPerson = { 
         name: newName, 
         number: newNumber, 
-        id: persons.length + 1 
+        id: `${persons.length + 1}` 
       }
       personService
         .createPerson(newPerson)
@@ -42,6 +42,25 @@ const App = () => {
 
     setNewName('')
     setNewNumber('')
+  }
+
+  const handleDeletion = id => {
+    const personToDelete = persons.find(p => p.id !== id)
+
+    if (!window.confirm(`Delete ${personToDelete.name} ?`)) {
+      return 
+    }
+
+    personService
+      .deletePerson(id)
+      .then(deletedPerson => {
+        setPersons(persons.filter(p => p.id !== deletedPerson.id))
+      })
+      .catch(err => {
+        console.log(err);
+        alert(`${personToDelete.name} is already deleted!`)
+        setPersons(persons.filter(p => p.id !== id))
+      })
   }
 
   const handleNewNameChange = event => {
@@ -77,7 +96,11 @@ const App = () => {
 
       <h2>Numbers</h2>
       
-      <Persons filterName={filterName} persons={persons} />
+      <Persons 
+        filterName={filterName} 
+        persons={persons}
+        handleDeletion={handleDeletion}
+      />
     </div>
   )
 }
